@@ -12,6 +12,7 @@ function App() {
   let [thumbsUpCount, setThumbsUpCount] = useState([0, 0, 0]);
   let [modal, setModal] = useState(false);
   let [modalTitle, setModalTitle] = useState(0);
+  let [value, setValue] = useState(0);
 
   let today = new Date();
   let year = today.getFullYear();
@@ -36,6 +37,12 @@ function App() {
     } else {
       setModal(false);
     }
+  };
+
+  let addTitle = () => {
+    let copyTitle = [...title];
+    copyTitle = [value, ...copyTitle];
+    setTitle(copyTitle);
   };
 
   return (
@@ -65,19 +72,43 @@ function App() {
               👍
             </button>
             {thumbsUpCount[i]}
+            <button
+              onClick={() => {
+                let copyTitle = [...title];
+                copyTitle.splice(i, 1);
+                setTitle(copyTitle);
+              }}
+            >
+              삭제
+            </button>
 
             <p>{`${year}년${month}월${date}일`}</p>
           </div>
         );
       })}
 
-      {modal === false ? null : <Modal title={title} modalTitle={modalTitle} year={year} month={month} date={date}/>}
+      <input
+        onChange={(e) => {
+          setValue(e.target.value);
+        }}
+        placeholder="ex) 여자 코트 추천"
+      />
+      <button onClick={addTitle}>추가</button>
+
+      {modal === false ? null : (
+        <Modal
+          title={title}
+          modalTitle={modalTitle}
+          year={year}
+          month={month}
+          date={date}
+        />
+      )}
     </div>
   );
 }
 
 function Modal(props) {
-  
   return (
     <div className="modal">
       <h4>{props.title[props.modalTitle]}</h4>
